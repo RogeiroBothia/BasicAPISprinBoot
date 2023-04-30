@@ -2,6 +2,7 @@ package com.rogerirobothia.example.service.implementation;
 
 import com.rogerirobothia.example.dto.ProductDTO;
 import com.rogerirobothia.example.entity.Product;
+import com.rogerirobothia.example.exceptions.ProductNotFound;
 import com.rogerirobothia.example.repository.ProductRepository;
 import com.rogerirobothia.example.service.interfaces.ProductService;
 import com.rogerirobothia.example.utility.UtilityModelMapper;
@@ -35,9 +36,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<Product> getProductById(Long productId) {
-
-        return productRepository.findById(productId);
+    public Product findProductById(Long productId) throws ProductNotFound {
+        Optional<Product> product = productRepository.findById(productId);
+        if(product.isEmpty()){
+            throw new ProductNotFound("Product is not available");
+        }
+        return product.get();
     }
 
     @Override
