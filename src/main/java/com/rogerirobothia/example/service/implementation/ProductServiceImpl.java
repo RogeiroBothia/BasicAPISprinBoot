@@ -6,7 +6,6 @@ import com.rogerirobothia.example.exceptions.ProductNotFound;
 import com.rogerirobothia.example.repository.ProductRepository;
 import com.rogerirobothia.example.service.interfaces.ProductService;
 import com.rogerirobothia.example.utility.UtilityModelMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -54,12 +53,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(ProductDTO productDTO) {
-        return null;
+    public Product updateProduct(Long id, ProductDTO productDTO) throws ProductNotFound{
+        if(productRepository.findById(id).isEmpty()){
+            throw new ProductNotFound("Product to update is not available");
+        }
+        Product product = mapper.mapToProduct(productDTO);
+        product.setId(id);
+        return productRepository.save(product);
     }
 
     @Override
     public void deleteProduct(Long productId) {
-
+        if(productRepository.findById(productId).isEmpty()){
+            throw new ProductNotFound("Product to delete is not available");
+        }
+        productRepository.deleteById(productId);
     }
 }

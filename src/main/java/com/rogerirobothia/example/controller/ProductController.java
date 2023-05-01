@@ -34,4 +34,14 @@ public class ProductController {
     public Product saveProduct(@Valid @RequestBody ProductDTO productoDTO){
         return productService.saveProduct(productoDTO);
     }
+
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) throws ProductNotFound{
+        return productService.updateProduct(id, productDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteProduct(@PathVariable Long id) throws ProductNotFound{
+        productService.deleteProduct(id);
+    }
 }
